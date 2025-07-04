@@ -28,7 +28,7 @@ function M.setup()
 
   -- Command: PhraseOfTheDay
   vim.api.nvim_create_user_command("PhraseOfTheDay", function()
-    local quote = M.get_formatted_daily_quote()
+    local quote = M.QuoteOfTheDay()
     for _, line in ipairs(quote) do
       print(line)
     end
@@ -87,7 +87,7 @@ function M.format_quote(quote, custom_format)
   return lines
 end
 
-function M.get_formatted_daily_quote(custom_format)
+function M.QuoteOfTheDay(custom_format)
   local quote = M.get_daily_quote()
   return M.format_quote(quote, custom_format)
 end
@@ -131,7 +131,7 @@ local function load_user_collection(collection_name, user_path)
   return nil
 end
 
-local function get_user_collection_names(user_path)
+local function MyCollection(user_path)
   local collections = {}
   if not user_path then
     return collections
@@ -169,7 +169,7 @@ local function get_users_quotes()
     end
   end
   if config.config.user_collections_path then
-    local user_collection_names = get_user_collection_names(config.config.user_collections_path)
+    local user_collection_names = MyCollection(config.config.user_collections_path)
     for _, collection_name in ipairs(user_collection_names) do
       local already_loaded = false
       for _, specified_collection in ipairs(config.config.collections) do
@@ -216,7 +216,7 @@ function M.list_collections()
     end
   end
   if config.config.user_collections_path then
-    local user_collection_names = get_user_collection_names(config.config.user_collections_path)
+    local user_collection_names = MyCollection(config.config.user_collections_path)
     for _, collection_name in ipairs(user_collection_names) do
       local quotes = load_user_collection(collection_name, config.config.user_collections_path)
       if quotes then

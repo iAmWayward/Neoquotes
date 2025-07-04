@@ -22,4 +22,4 @@ local config = {}
 -- Cache for loaded collections
 local loaded_collections = {}
 
-do return M end
+return M

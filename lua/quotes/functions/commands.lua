@@ -39,7 +39,7 @@ function M.setup()
   -- Command: RandomPhrase
   vim.api.nvim_create_user_command("RandomPhrase", function(opts)
     local collection = opts.args ~= "" and opts.args or nil
-    local quote = M.get_random_quote(collection)
+    local quote = M.GetRandomQuote(collection)
     local formatted = M.format_quote(quote)
     for _, line in ipairs(formatted) do
       print(line)
@@ -48,7 +48,7 @@ function M.setup()
     desc = "Show a random phrase",
     nargs = "?",
     complete = function()
-      local collections = M.list_collections()
+      local collections = M.ListCollections()
       local names = {}
       for _, collection in ipairs(collections) do
         table.insert(names, collection.name)
@@ -59,7 +59,7 @@ function M.setup()
 
   -- Command: ListPhraseCollections
   vim.api.nvim_create_user_command("ListPhraseCollections", function()
-    local collections = M.list_collections()
+    local collections = M.ListCollections()
     print("Available phrase collections:")
     for _, collection in ipairs(collections) do
       print(string.format("  %s (%d quotes)", collection.name, collection.count))
@@ -131,7 +131,7 @@ local function load_user_collection(collection_name, user_path)
   return nil
 end
 
-local function MyCollection(user_path)
+local function users_active_collections(user_path)
   local collections = {}
   if not user_path then
     return collections
@@ -169,7 +169,7 @@ local function get_users_quotes()
     end
   end
   if config.config.user_collections_path then
-    local user_collection_names = MyCollection(config.config.user_collections_path)
+    local user_collection_names = users_active_collections(config.config.user_collections_path)
     for _, collection_name in ipairs(user_collection_names) do
       local already_loaded = false
       for _, specified_collection in ipairs(config.config.collections) do
@@ -203,7 +203,7 @@ end
 -- Public API
 ---------------------------
 
-function M.list_collections()
+function M.ListCollections()
   local collections = {}
   for _, collection_name in ipairs(DEFAULT_COLLECTIONS) do
     local quotes = load_builtin_collection(collection_name)
@@ -216,7 +216,7 @@ function M.list_collections()
     end
   end
   if config.config.user_collections_path then
-    local user_collection_names = MyCollection(config.config.user_collections_path)
+    local user_collection_names = users_active_collections(config.config.user_collections_path)
     for _, collection_name in ipairs(user_collection_names) do
       local quotes = load_user_collection(collection_name, config.config.user_collections_path)
       if quotes then
@@ -231,7 +231,7 @@ function M.list_collections()
   return collections
 end
 
-function M.get_random_quote(collection_name)
+function M.GetRandomQuote(collection_name)
   local quotes_to_use = {}
   if collection_name then
     local collection_data = load_collection(collection_name)

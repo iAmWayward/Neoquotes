@@ -2,24 +2,35 @@ local M = {}
 
 -- Default configuration
 local default_config = {
-  -- Which quote collections to include (will auto-discover from collections/ folder)
   collections = { "taoist", "buddhist" },
-  -- Custom quotes can be added here
   custom_quotes = {},
-  -- Format options
   format = {
     prefix = "💭 ",
     author_prefix = "   — ",
     add_empty_lines = true,
   },
-  -- Auto-discover collections from collections/ folder
   auto_discover = true,
 }
 
--- Plugin configuration (will be set by setup)
-local config = {}
+-- Plugin configuration (populated in setup)
+M.config = {}
 
--- Cache for loaded collections
-local loaded_collections = {}
+-- Deep merge utility (basic version)
+local function merge(t1, t2)
+  for k, v in pairs(t2) do
+    if type(v) == "table" and type(t1[k] or false) == "table" then
+      merge(t1[k], v)
+    else
+      t1[k] = v
+    end
+  end
+  return t1
+end
+
+function M.setup(opts)
+  opts = opts or {}
+  M.config = merge(vim.deepcopy(default_config), opts)
+  -- Optionally: do any additional setup/validation here
+end
 
 return M

@@ -1,11 +1,12 @@
--- Only load if not already loaded
-if vim.g.loaded_phrase_of_the_day then
-  return
+local M = {}
+
+function M.setup(opts)
+  if vim.g.loaded_phrase_of_the_day then
+    return
+  end
+  vim.g.loaded_phrase_of_the_day = 1
+  require("config.config").setup(opts)
+  require("functions.commands").setup()
 end
-vim.g.loaded_phrase_of_the_day = 1
-return {
-  setup = function(opts)
-    require("config.config").setup(opts)
-    require("functions.commands").setup()
-  end,
-}
+
+return M

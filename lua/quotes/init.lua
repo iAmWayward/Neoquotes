@@ -5,7 +5,7 @@ end
 vim.g.loaded_phrase_of_the_day = 1
 return {
   setup = function(opts)
-    require("config.config").setup(opts)
+    require("config").setup(opts)
     require("functions.commands").setup()
   end,
 }

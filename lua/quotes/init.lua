@@ -5,8 +5,8 @@ function M.setup(opts)
     return
   end
   vim.g.loaded_phrase_of_the_day = 1
-  require("config.config").setup(opts)
-  require("quotes.functions.commands").setup()
+  require("config").setup(opts)
+  require("quotes.commands").setup()
 end
 
 return M

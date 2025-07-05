@@ -8,8 +8,38 @@ Quotes are defined in lua tables. Neoquotes comes with a few of its
 default quote collections enabled. A wider set of more niche quotes
 is also available, but these quotes must be enabled in the config.
 
+## Minimal config
+```lua
+return {
+  {
+    "iAmWayward/quotes.nvim",
+    event = "VeryLazy",
+    opts = {},
+  }
+}
+```
+
+## Example Use
+[Dashboard.nvim](https://github.com/nvimdev/dashboard-nvim)
+```lua
+return {
+    {  
+        'nvimdev/dashboard-nvim',
+
+        config = function()
+            require("dashboard").setup({
+              config = {
+                    -- ... [your dashboard setup]
+                    -- Use QuoteOfTheDay command to get today's quote
+                    footer = require("quotes.functions.commands").QuoteOfTheDay(),
+                }, 
+            })
+        end
+    },
+}
+```
+
 ## Default Config
-### Lazy 
 ```lua
 return {
   "iAmWayward/quotes.nvim",
@@ -47,19 +77,21 @@ return {
 }
 ```
 
+You can also use `:PhraseOfTheDay`
+
 ## Adding your own quotes
-The format for a quote table is pretty simple
+The format for a quote table is pretty simple:
 
 ```lua
 return {
-	{
-		text = "The mind is everything. What you think you become.",
-		author = "Buddha",
-	},
-	{
-		text = "Peace comes from within. Do not seek it without.",
-		author = "Buddha",
-	},
+    {
+        text = "The mind is everything. What you think you become.",
+        author = "Buddha",
+    },
+    {
+        text = "Peace comes from within. Do not seek it without.",
+        author = "Buddha",
+    },
     -- etc...
 }
 ```

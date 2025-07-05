@@ -4,7 +4,7 @@ local M = {}
 local loaded_collections = {}
 
 -- Reference to plugin config
-local config = require("config.config")
+local config = require("config")
 
 local DEFAULT_COLLECTIONS = {
   "buddhist",
@@ -192,7 +192,7 @@ local function get_users_quotes()
 end
 
 local function get_default_quotes()
-  local quotes = load_builtin_collection("inspirational")
+  local quotes = load_builtin_collection("western-philosophy")
   if quotes then
     return quotes
   end

@@ -1,6 +1,6 @@
 local M = {}
 
--- Cache for loaded collections
+--- Cache for loaded collections
 local loaded_collections = {}
 
 -- Reference to plugin config
@@ -72,18 +72,50 @@ end
 ---------------------------
 -- Formatting and retrieval
 ---------------------------
-
 function M.format_quote(quote, custom_format)
   local fmt = custom_format or config.config.format
   local lines = {}
+
+  -- Helper to wrap text to col_limit
+  local function wrap_text(text, limit)
+    local wrapped = {}
+    local line = ""
+    for word in text:gmatch("%S+") do
+      if #line + #word + 1 > limit then
+        table.insert(wrapped, line)
+        line = word
+      else
+        line = (#line > 0) and (line .. " " .. word) or word
+      end
+    end
+    if #line > 0 then
+      table.insert(wrapped, line)
+    end
+    return wrapped
+  end
+
   if fmt.add_empty_lines then
     table.insert(lines, "")
   end
-  table.insert(lines, fmt.prefix .. quote.text)
-  table.insert(lines, fmt.author_prefix .. quote.author)
+
+  local quote_lines = wrap_text(quote.text, fmt.col_limit - #fmt.prefix)
+  for idx, qline in ipairs(quote_lines) do
+    if idx == 1 then
+      table.insert(lines, fmt.prefix .. qline)
+    else
+      table.insert(lines, string.rep(" ", #fmt.prefix) .. qline)
+    end
+  end
+
+  if fmt.attribute_author then
+    local author_line = fmt.author_prefix .. quote.author
+    table.insert(lines, author_line)
+  end
+
   if fmt.add_empty_lines then
     table.insert(lines, "")
   end
+
   return lines
 end
 

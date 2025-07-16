@@ -22,21 +22,18 @@ return {
 ## Example Use
 [Dashboard.nvim](https://github.com/nvimdev/dashboard-nvim)
 ```lua
-return {
-    {  
-        'nvimdev/dashboard-nvim',
-
-        config = function()
-            require("dashboard").setup({
-              config = {
-                    -- ... [your dashboard setup]
-                    -- Use QuoteOfTheDay command to get today's quote
-                    footer = require("quotes.functions.commands").QuoteOfTheDay(),
-                }, 
-            })
-        end
-    },
-}
+{  
+    'nvimdev/dashboard-nvim',
+    config = function()
+        require("dashboard").setup({
+          config = {
+                -- ... [your dashboard setup]
+                -- Use QuoteOfTheDay command to get today's quote
+                footer = require("quotes.functions.commands").QuoteOfTheDay(),
+            }, 
+        })
+    end
+},
 ```
 
 ## Default Config
@@ -51,11 +48,8 @@ return {
       "buddhist",
       "taoist",
       "generic-inspiration",
-      "science",
-      "engineering",
-      -- "satanist",
+      "stem",
       -- "western-philosophy"
-      -- "stoic", 
       -- "minecraft", 
       -- "sims",
     },

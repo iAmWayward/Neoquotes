@@ -1,6 +1,0 @@
-return {
-  {
-    text = "",
-    author = "",
-  },
-}

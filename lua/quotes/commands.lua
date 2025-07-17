@@ -3,9 +3,17 @@ local M = {}
 --- Cache for loaded collections
 local loaded_collections = {}
 
+--- Cache for shuffled quotes
+local shuffled_quotes_cache = {
+  quotes = nil,
+  config_hash = nil,
+  shuffle_date = nil
+}
+
 -- Reference to plugin config
 local config = require("config")
 
+--- Table of collections available in quote-collections
 local DEFAULT_COLLECTIONS = {
   "buddhist",
   "stoic",
@@ -14,6 +22,41 @@ local DEFAULT_COLLECTIONS = {
   "science",
   "humor"
 }
+
+---@param t table The table of quotes to shuffle
+---@return table ShuffledCollection The shuffled quotes
+function M.FisherYates(t)
+  local tbl = {}
+  for i = 1, #t do
+    tbl[i] = t[i]
+  end
+  for i = #tbl, 2, -1 do
+    local j = math.random(i)
+    tbl[i], tbl[j] = tbl[j], tbl[i]
+  end
+  return tbl
+end
+
+local function get_config_hash(quotes)
+  local hash_parts = {}
+
+  table.insert(hash_parts, tostring(#quotes))
+
+  -- Sort collections for consistent hashing
+  local sorted_collections = {}
+  for _, collection in ipairs(config.config.collections or {}) do
+    table.insert(sorted_collections, collection)
+  end
+  table.sort(sorted_collections)
+
+  for _, collection in ipairs(sorted_collections) do
+    table.insert(hash_parts, collection)
+  end
+
+  table.insert(hash_parts, config.config.user_collections_path or "")
+
+  return table.concat(hash_parts, "|")
+end
 
 ---------------------------
 -- Command registration
@@ -28,7 +71,7 @@ function M.setup()
   M._commands_created = true
 
   -- Command: PhraseOfTheDay
-  vim.api.nvim_create_user_command("PhraseOfTheDay", function()
+  vim.api.nvim_create_user_command("QuoteOfTheDay", function()
     local quote = M.QuoteOfTheDay()
     for _, line in ipairs(quote) do
       print(line)
@@ -38,7 +81,7 @@ function M.setup()
   })
 
   -- Command: RandomPhrase
-  vim.api.nvim_create_user_command("RandomPhrase", function(opts)
+  vim.api.nvim_create_user_command("QuoteRandomPhrase", function(opts)
     local collection = opts.args ~= "" and opts.args or nil
     local quote = M.GetRandomQuote(collection)
     local formatted = M.format_quote(quote)
@@ -59,14 +102,14 @@ function M.setup()
   })
 
   -- Command: ListPhraseCollections
-  vim.api.nvim_create_user_command("ListPhraseCollections", function()
+  vim.api.nvim_create_user_command("QuoteListCollections", function()
     local collections = M.ListCollections()
-    print("Available phrase collections:")
+    print("Available quote collections:")
     for _, collection in ipairs(collections) do
       print(string.format("  %s (%d quotes)", collection.name, collection.count))
     end
   end, {
-    desc = "List available phrase collections",
+    desc = "List available quote collections",
   })
 end
 
@@ -287,18 +330,27 @@ function M.GetRandomQuote(collection_name)
   return quotes_to_use[random_index]
 end
 
-function M.FisherYates(t)
-  local tbl = {}
-  for i = 1, #t do
-    tbl[i] = t[i]
+local function get_day_number()
+  local date = os.date("*t")
+  -- Day calculation accounting for leap years
+  local base_year = 2000 -- Use a consistent base year
+  local year_offset = date.year - base_year
+
+  -- Calculate leap days since base year
+  local leap_days = 0
+  for y = base_year, date.year - 1 do
+    if (y % 4 == 0 and y % 100 ~= 0) or (y % 400 == 0) then
+      leap_days = leap_days + 1
+    end
   end
-  for i = #tbl, 2, -1 do
-    local j = math.random(i)
-    tbl[i], tbl[j] = tbl[j], tbl[i]
-  end
-  return tbl
+
+  return date.yday + (year_offset * 365) + leap_days
 end
 
+--- Function which changes quotes once every 24h
+--- If the quotes in the config table change, the
+--- table is reshuffled.
+--- @return table Pair Quote and the person attributed
 function M.get_daily_quote()
   local users_quotes = get_users_quotes()
   if #users_quotes == 0 then
@@ -312,19 +364,27 @@ function M.get_daily_quote()
     }
   end
 
-  -- Use Fisher-Yates shuffle with day-based seed for consistent daily quotes
-  local date = os.date("*t")
-  local day_of_year = date.yday + (date.year * 365)
+  local day_number = get_day_number()
+  local current_config_hash = get_config_hash(users_quotes)
 
-  math.randomseed(day_of_year)
-  local shuffled_quotes = M.FisherYates(users_quotes)
+  -- Check if we need to reshuffle (config changed or first time)
+  local needs_reshuffle = (
+    shuffled_quotes_cache.quotes == nil or
+    shuffled_quotes_cache.config_hash ~= current_config_hash
+  )
 
-  -- Reset seed for other random operations
-  -- TODO: More sorting algos?
-  math.randomseed(os.time())
+  if needs_reshuffle then
+    -- Use a deterministic seed based on config hash for consistency
+    math.randomseed(tonumber(string.sub(current_config_hash:gsub("%D", ""), 1, 8)) or day_number)
+    shuffled_quotes_cache.quotes = M.FisherYates(users_quotes)
+    shuffled_quotes_cache.config_hash = current_config_hash
+    math.randomseed(os.time()) -- Reset for other random operations
+  end
 
-  -- Return the first quote from the shuffled array
-  return shuffled_quotes[1]
+  -- Use day_number directly for index calculation
+  local quote_index = (day_number % #shuffled_quotes_cache.quotes) + 1
+
+  return shuffled_quotes_cache.quotes[quote_index]
 end
 
 return M

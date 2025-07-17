@@ -19,6 +19,7 @@ local DEFAULT_COLLECTIONS = {
 -- Command registration
 ---------------------------
 
+---
 function M.setup()
   -- Only create commands once
   if M._commands_created then
@@ -98,7 +99,7 @@ function M.format_quote(quote, custom_format)
     table.insert(lines, "")
   end
 
-  local quote_lines = wrap_text(quote.text, fmt.col_limit - #fmt.prefix)
+  local quote_lines = wrap_text(quote.text, fmt.column_limit - #fmt.prefix)
   for idx, qline in ipairs(quote_lines) do
     if idx == 1 then
       table.insert(lines, fmt.prefix .. qline)
@@ -286,15 +287,44 @@ function M.GetRandomQuote(collection_name)
   return quotes_to_use[random_index]
 end
 
+function M.FisherYates(t)
+  local tbl = {}
+  for i = 1, #t do
+    tbl[i] = t[i]
+  end
+  for i = #tbl, 2, -1 do
+    local j = math.random(i)
+    tbl[i], tbl[j] = tbl[j], tbl[i]
+  end
+  return tbl
+end
+
 function M.get_daily_quote()
   local users_quotes = get_users_quotes()
   if #users_quotes == 0 then
     users_quotes = get_default_quotes()
   end
+
+  if #users_quotes == 0 then
+    return {
+      text = "No quotes available",
+      author = "Plugin",
+    }
+  end
+
+  -- Use Fisher-Yates shuffle with day-based seed for consistent daily quotes
   local date = os.date("*t")
   local day_of_year = date.yday + (date.year * 365)
-  local quote_index = (day_of_year % #users_quotes) + 1
-  return users_quotes[quote_index]
+
+  math.randomseed(day_of_year)
+  local shuffled_quotes = M.FisherYates(users_quotes)
+
+  -- Reset seed for other random operations
+  -- TODO: More sorting algos?
+  math.randomseed(os.time())
+
+  -- Return the first quote from the shuffled array
+  return shuffled_quotes[1]
 end
 
 return M

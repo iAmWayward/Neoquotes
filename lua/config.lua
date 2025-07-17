@@ -9,7 +9,7 @@ local default_config = {
     author_prefix = "   — ",
     add_empty_lines = true,
     attribute_author = true,
-    col_limit = 120,
+    column_limit = 120,
   },
   auto_discover = true,
 }

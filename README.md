@@ -1,12 +1,5 @@
 # NeoQuotes
-Neoquotes is a simple plugin for the [Neovim](https://github.com/neovim/neovim)
-text editor. It can be used to give a "Quote of the Day"
-based on the current date, and/or return a random quote
-from a given set of quotes.
-
-Quotes are defined in lua tables. Neoquotes comes with a few of its
-default quote collections enabled. A wider set of more niche quotes
-is also available, but these quotes must be enabled in the config.
+Neoquotes is an over-engineered quote plugin for the [Neovim](https://github.com/neovim/neovim) text editor. It can be used to give a "Quote of the Day" based on the current date, and/or return a random quote from a set of quotes. There are default categories of quotes, extra sets that can be enabled, and simple extensibility/formatting options to add your own quotes and styling.
 
 ## Minimal config
 ```lua
@@ -71,7 +64,6 @@ return {
 }
 ```
 
-You can also use `:PhraseOfTheDay`
 
 ## Adding your own quotes
 The format for a quote table is pretty simple:
@@ -89,3 +81,14 @@ return {
     -- etc...
 }
 ```
+
+## Commands
+| Command               | Description                              |
+|-----------------------|------------------------------------------|
+| `:QuoteOfTheDay`      | This only changes once every 24 hours    |
+| `:QuoteRandomPhrase`  | See a random phrase (not just your QOTD) |
+| `:QuoteListCollections` | Show which collections you have enabled |
+
+
+
+

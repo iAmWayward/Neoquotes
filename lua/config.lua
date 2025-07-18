@@ -1,6 +1,6 @@
 local M = {}
 
--- Default configuration
+--- Default configuration
 local default_config = {
   collections = { "taoist", "buddhist" },
   custom_quotes = {},
@@ -9,6 +9,7 @@ local default_config = {
     author_prefix = "   — ",
     add_empty_lines = true,
     attribute_author = true,
+    set_column_limit = true,
     column_limit = 120,
   },
   auto_discover = true,
@@ -32,7 +33,7 @@ end
 function M.setup(opts)
   opts = opts or {}
   M.config = merge(vim.deepcopy(default_config), opts)
-  -- Optionally: do any additional setup/validation here
+  -- any additional setup/validation here
 end
 
 return M

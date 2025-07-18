@@ -138,12 +138,23 @@ function M.format_quote(quote, custom_format)
     return wrapped
   end
 
+  -- Config opt
   if fmt.add_empty_lines then
     table.insert(lines, "")
   end
 
-  local quote_lines = wrap_text(quote.text, fmt.column_limit - #fmt.prefix)
-  for idx, qline in ipairs(quote_lines) do
+  ---
+  ---@return table Quote A conditionally line-formatted table made from the
+  ---                     raw quote string
+  local quote_lines = function()
+    if fmt.set_column_limit then
+      return wrap_text(quote.text, fmt.column_limit - #fmt.prefix)
+    else
+      return { quote.text }
+    end
+  end
+
+  for idx, qline in ipairs(quote_lines()) do
     if idx == 1 then
       table.insert(lines, fmt.prefix .. qline)
     else
@@ -151,11 +162,14 @@ function M.format_quote(quote, custom_format)
     end
   end
 
+
+  -- Author attribution/Second printed line
   if fmt.attribute_author then
     local author_line = fmt.author_prefix .. quote.author
     table.insert(lines, author_line)
   end
 
+  -- Config opt
   if fmt.add_empty_lines then
     table.insert(lines, "")
   end
@@ -375,6 +389,8 @@ function M.get_daily_quote()
 
   if needs_reshuffle then
     -- Use a deterministic seed based on config hash for consistency
+    -- Then shuffle the quote table using the Fisher-Yates Algorithm
+    -- TODO: Implement config opt for other sorting schemes
     math.randomseed(tonumber(string.sub(current_config_hash:gsub("%D", ""), 1, 8)) or day_number)
     shuffled_quotes_cache.quotes = M.FisherYates(users_quotes)
     shuffled_quotes_cache.config_hash = current_config_hash

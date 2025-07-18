@@ -10,8 +10,8 @@ That was pretty nice, and as I added more functionality, I decided that it was e
 
 ### This functionality includes:
 * Preconfigured quote sets such as "philosophy" "science" and "minecract"
-* The ability to quickly and conveniently add your own quote collection
-* The ability to configure the prefix for both the quote and the author
+* The ability to quickly and conveniently add your own quote collection(s)
+* The ability to configure a prefix for both the quote and the author
 * The ability to hide author attribution 
     * Wow I should add hiding the quote
 * Fisher-Yates shuffle algorithm shamelessly liberated from this [gist](https://gist.github.com/Uradamus/10323382)

@@ -1,5 +1,6 @@
 # NeoQuotes
 Neoquotes is a random quote/quote-of-the-day plugin for the [Neovim](https://github.com/neovim/neovim) text editor. 
+<img width="1145" height="537" alt="coffeeTheorems" src="https://github.com/user-attachments/assets/9d6ea4dc-39fc-4800-a49a-cb4a61861672" />
 
 ## Why neoquotes?
 The project started as a simple lua function in my dashboard.nvim config to display a quote every day from a table of quotes. Then I added a command to generate a one-off random quote. 
@@ -18,6 +19,7 @@ That was pretty nice, and as I added more functionality, I decided that it was e
 * Handles leap-years lol
 
 So it's a little over-engineered. But it is very fit for purpose.
+<img width="327" height="33" alt="loadTime" src="https://github.com/user-attachments/assets/b581f54c-64f8-4ca5-99eb-3f3124772ff6" />
 
 ## Minimal config
 ```lua

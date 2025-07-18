@@ -1,5 +1,7 @@
-# NeoQuotes
+# Neoquotes
 Neoquotes is a random quote/quote-of-the-day plugin for the [Neovim](https://github.com/neovim/neovim) text editor. 
+
+<img width="1145" height="537" alt="coffeeTheorems" src="https://github.com/user-attachments/assets/9d6ea4dc-39fc-4800-a49a-cb4a61861672" />
 
 ## Why neoquotes?
 The project started as a simple lua function in my dashboard.nvim config to display a quote every day from a table of quotes. Then I added a command to generate a one-off random quote. 
@@ -7,19 +9,21 @@ The project started as a simple lua function in my dashboard.nvim config to disp
 That was pretty nice, and as I added more functionality, I decided that it was extensive enough to justify tightening it up and releasing it as a plugin. 
 
 ### This functionality includes:
-* Preconfigured quote sets such as "philosophy" "science" and "minecract"
-* The ability to quickly and conveniently add your own quote collection
-* The ability to configure the prefix for both the quote and the author
+* Preconfigured quote collections such as "philosophy" "science" and "minecract"
+* The ability to quickly and conveniently add your own quote collection(s)
+* The ability to configure a prefix for both the quote and the author
 * The ability to hide author attribution 
     * Wow I should add hiding the quote
 * Fisher-Yates shuffle algorithm shamelessly liberated from this [gist](https://gist.github.com/Uradamus/10323382)
 * Optional column limit formatting (for use in buffers that do not wrap such as dashboard.nvim)
 * Optional vertical padding
 * Handles leap-years lol
+* Only re-shuffle when the table of quotes is changed, not on arbitrary config changes.
 
 So it's a little over-engineered. But it is very fit for purpose.
+<img width="327" height="33" alt="loadTime" src="https://github.com/user-attachments/assets/b581f54c-64f8-4ca5-99eb-3f3124772ff6" />
 
-## Minimal config
+## Minimal lazy.nvim config
 ```lua
 return {
   {

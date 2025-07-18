@@ -2,7 +2,7 @@ local M = {}
 
 --- Default configuration
 local default_config = {
-  collections = { "taoist", "buddhist" },
+  collections = { "swe", "tips", "science", "buddist", "taoist", },
   custom_quotes = {},
   format = {
     prefix = "💭 ",

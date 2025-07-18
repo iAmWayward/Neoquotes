@@ -60,13 +60,14 @@ return {
     -- Setting this will override defaults
     collections = {
     -- The collections not-included in the default set are commented out here
+      "tips", -- neovim motion tips
+      "swe",  -- Software Engineering
       "buddhist",
       "taoist",
-      "generic-inspiration",
-      "stem",
+      "science", 
+      -- "generic-inspiration",
       -- "western-philosophy"
-      -- "minecraft", 
-      -- "sims",
+      -- "minecraft", -- minecraft title screen splashes
     },
     
     -- Path to user's custom quote collections

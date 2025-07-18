@@ -164,7 +164,7 @@ function M.format_quote(quote, custom_format)
 
 
   -- Author attribution/Second printed line
-  if fmt.attribute_author then
+  if fmt.attribute_author and quote.author ~= nil then
     local author_line = fmt.author_prefix .. quote.author
     table.insert(lines, author_line)
   end

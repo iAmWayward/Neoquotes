@@ -1,5 +1,6 @@
 # Neoquotes
 Neoquotes is a random quote/quote-of-the-day plugin for the [Neovim](https://github.com/neovim/neovim) text editor. 
+
 <img width="1145" height="537" alt="coffeeTheorems" src="https://github.com/user-attachments/assets/9d6ea4dc-39fc-4800-a49a-cb4a61861672" />
 
 ## Why neoquotes?

@@ -23,7 +23,7 @@ That was pretty nice, and as I added more functionality, I decided that it was e
 So it's a little over-engineered. But it is very fit for purpose.
 <img width="327" height="33" alt="loadTime" src="https://github.com/user-attachments/assets/b581f54c-64f8-4ca5-99eb-3f3124772ff6" />
 
-## Minimal config
+## Minimal lazy.nvim config
 ```lua
 return {
   {

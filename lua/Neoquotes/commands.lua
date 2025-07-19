@@ -26,7 +26,7 @@ function M.setup()
   M._commands_created = true
 
   -- Command: PhraseOfTheDay
-  vim.api.nvim_create_user_command("PhraseOfTheDay", function()
+  vim.api.nvim_create_user_command("QuoteOfTheDay", function()
     local quote = M.QuoteOfTheDay()
     for _, line in ipairs(quote) do
       print(line)
@@ -36,7 +36,7 @@ function M.setup()
   })
 
   -- Command: RandomPhrase
-  vim.api.nvim_create_user_command("RandomPhrase", function(opts)
+  vim.api.nvim_create_user_command("QuoteRandomPhrase", function(opts)
     local collection = opts.args ~= "" and opts.args or nil
     local quote = M.GetRandomQuote(collection)
     local formatted = M.format_quote(quote)
@@ -57,7 +57,7 @@ function M.setup()
   })
 
   -- Command: ListPhraseCollections
-  vim.api.nvim_create_user_command("ListPhraseCollections", function()
+  vim.api.nvim_create_user_command("QuoteListCollections", function()
     local collections = M.ListCollections()
     print("Available phrase collections:")
     for _, collection in ipairs(collections) do

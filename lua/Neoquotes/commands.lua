@@ -75,7 +75,7 @@ function M.format_quote(quote, custom_format)
   local fmt = custom_format or config.config.format
   local lines = {}
 
-  -- Helper to wrap text to col_limit
+  -- Helper to wrap text to column_limit
   local function wrap_text(text, limit)
     local wrapped = {}
     local line = ""

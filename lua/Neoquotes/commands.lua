@@ -137,7 +137,7 @@ local function load_builtin_collection(collection_name)
   if loaded_collections[cache_key] then
     return loaded_collections[cache_key]
   end
-  local ok, quotes = pcall(require, "quotes.quote-collections." .. collection_name)
+  local ok, quotes = pcall(require, "Neoquotes.quote-collections." .. collection_name)
   if ok and type(quotes) == "table" then
     loaded_collections[cache_key] = quotes
     return quotes

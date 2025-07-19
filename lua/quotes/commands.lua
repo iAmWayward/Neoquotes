@@ -118,6 +118,13 @@ end
 ---------------------------
 function M.format_quote(quote, custom_format)
   local fmt = custom_format or config.config.format
+
+  -- Check if the quote has collection-specific formatting
+  if quote._collection_format then
+    -- Merge collection format with global format, collection takes precedence
+    fmt = vim.tbl_deep_extend("force", fmt, quote._collection_format)
+  end
+
   local lines = {}
 
   -- Helper to wrap text to col_limit
@@ -182,12 +189,13 @@ function M.QuoteOfTheDay(custom_format)
   return M.format_quote(quote, custom_format)
 end
 
--- Utility to merge user config with defaults if needed (shouldn’t need this here)
+-- Utility to merge user config with defaults if needed (shouldn't need this here)
 -- Just use config.config
 
 ---------------------------
 -- Collection handling
 ---------------------------
+
 local function load_builtin_collection(collection_name)
   local cache_key = "builtin_" .. collection_name
   if loaded_collections[cache_key] then
@@ -254,9 +262,6 @@ local function load_user_collection(collection_name, user_path)
   return nil
 end
 
---- Return a list of the collections in the user's custom collection folder
----@param user_path string Path to the user's custom collections
----@return table loaded_functions the list of user collections
 local function users_active_collections(user_path)
   local collections = {}
   if not user_path then

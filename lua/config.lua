@@ -1,8 +1,7 @@
 local M = {}
 
---- Default configuration
 local default_config = {
-  collections = { "tips", "science", "buddhist", "taoist", },
+  collections = { "tips", "science", "buddhist", "taoist" },
   custom_quotes = {},
   format = {
     prefix = "💭 ",
@@ -15,10 +14,8 @@ local default_config = {
   auto_discover = true,
 }
 
--- Plugin configuration (populated in setup)
 M.config = {}
 
--- Deep merge utility
 local function merge(t1, t2)
   for k, v in pairs(t2) do
     if type(v) == "table" and type(t1[k] or false) == "table" then
@@ -32,8 +29,22 @@ end
 
 function M.setup(opts)
   opts = opts or {}
-  M.config = merge(vim.deepcopy(default_config), opts)
-  -- any additional setup/validation here
+  local config = vim.deepcopy(default_config)
+
+  if opts.collections ~= nil then
+    config.collections = opts.collections
+  end
+  if opts.custom_quotes ~= nil then
+    config.custom_quotes = opts.custom_quotes
+  end
+  if opts.format ~= nil then
+    config.format = merge(config.format, opts.format)
+  end
+  if opts.auto_discover ~= nil then
+    config.auto_discover = opts.auto_discover
+  end
+
+  M.config = config
 end
 
 return M

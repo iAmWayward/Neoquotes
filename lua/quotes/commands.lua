@@ -16,11 +16,9 @@ local config = require("config")
 --- Table of collections available in quote-collections
 local DEFAULT_COLLECTIONS = {
   "buddhist",
-  "stoic",
-  "inspirational",
-  "western-philosophy",
+  "philosophy",
   "science",
-  "humor"
+  "taoist"
 }
 
 ---@param t table The table of quotes to shuffle
@@ -336,26 +334,39 @@ end
 
 function M.ListCollections()
   local collections = {}
-  for _, collection_name in ipairs(DEFAULT_COLLECTIONS) do
-    local quotes = load_builtin_collection(collection_name)
+  -- Use user-specified collections if set, otherwise fall back to defaults
+  local to_list = config.config.collections or DEFAULT_COLLECTIONS
+  for _, collection_name in ipairs(to_list) do
+    local quotes = load_collection(collection_name)
     if quotes then
       table.insert(collections, {
         name = collection_name,
         count = #quotes,
-        source = "built-in"
+        source = config.config.user_collections_path and
+        load_user_collection(collection_name, config.config.user_collections_path) and "user" or "built-in"
       })
     end
   end
+  -- Also add any user collections not already listed (to support collections dropped in the folder but not listed explicitly)
   if config.config.user_collections_path then
     local user_collection_names = users_active_collections(config.config.user_collections_path)
     for _, collection_name in ipairs(user_collection_names) do
-      local quotes = load_user_collection(collection_name, config.config.user_collections_path)
-      if quotes then
-        table.insert(collections, {
-          name = collection_name,
-          count = #quotes,
-          source = "user"
-        })
+      local already = false
+      for _, col in ipairs(collections) do
+        if col.name == collection_name then
+          already = true
+          break
+        end
+      end
+      if not already then
+        local quotes = load_user_collection(collection_name, config.config.user_collections_path)
+        if quotes then
+          table.insert(collections, {
+            name = collection_name,
+            count = #quotes,
+            source = "user"
+          })
+        end
       end
     end
   end

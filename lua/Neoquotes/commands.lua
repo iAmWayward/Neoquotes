@@ -16,11 +16,9 @@ local config = require("config")
 --- Table of collections available in quote-collections
 local DEFAULT_COLLECTIONS = {
   "buddhist",
-  "stoic",
-  "inspirational",
-  "western-philosophy",
+  "philosophy",
   "science",
-  "humor"
+  "taoist"
 }
 
 ---@param t table The table of quotes to shuffle
@@ -201,7 +199,7 @@ local function load_builtin_collection(collection_name)
   if loaded_collections[cache_key] then
     return loaded_collections[cache_key]
   end
-  local ok, collection_data = pcall(require, "quotes.quote-collections." .. collection_name)
+  local ok, collection_data = pcall(require, "Neoquotes.quote-collections." .. collection_name)
   if ok and type(collection_data) == "table" then
     -- Process the collection data to add metadata to quotes
     local quotes = collection_data.quotes or collection_data

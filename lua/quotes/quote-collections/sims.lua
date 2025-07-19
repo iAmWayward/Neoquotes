@@ -1,8 +1,0 @@
-return {
-  quotes = {
-    {
-      text = "",
-      author = "",
-    },
-  }
-}

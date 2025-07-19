@@ -272,11 +272,16 @@ local function get_users_quotes()
 end
 
 local function get_default_quotes()
-  local quotes
+  local all_quotes = {}
   for _, collection_name in ipairs(DEFAULT_COLLECTIONS) do
-    quotes = load_builtin_collection(collection_name)
+    local quotes = load_builtin_collection(collection_name)
+    if quotes then
+      for _, quote in ipairs(quotes) do
+        table.insert(all_quotes, quote)
+      end
+    end
   end
-  return quotes
+  return all_quotes
 end
 
 ---------------------------

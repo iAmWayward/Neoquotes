@@ -1,4 +1,8 @@
 return {
+  format = {
+    prefix = "⌨️ ",
+    author_prefix = "Usage: ",
+  },
   { text = "gg", author = "Move to the first line of the file" },
   { text = "G", author = "Move to the last line" },
   { text = "gg=G", author = "Reindent the whole file" },

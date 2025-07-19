@@ -8,11 +8,9 @@ local config = require("config")
 
 local DEFAULT_COLLECTIONS = {
   "buddhist",
-  "stoic",
-  "inspirational",
-  "western-philosophy",
+  "taoist",
+  "philosophy",
   "science",
-  "humor"
 }
 
 ---------------------------
@@ -225,11 +223,11 @@ local function get_users_quotes()
 end
 
 local function get_default_quotes()
-  local quotes = load_builtin_collection("western-philosophy")
-  if quotes then
-    return quotes
+  local quotes
+  for _, collection_name in ipairs(DEFAULT_COLLECTIONS) do
+    quotes = load_builtin_collection(collection_name)
   end
-  return {}
+  return quotes
 end
 
 ---------------------------

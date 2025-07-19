@@ -122,6 +122,13 @@ end
 ---------------------------
 function M.format_quote(quote, custom_format)
   local fmt = custom_format or config.config.format
+
+  -- Check if the quote has collection-specific formatting
+  if quote._collection_format then
+    -- Merge collection format with global format, collection takes precedence
+    fmt = vim.tbl_deep_extend("force", fmt, quote._collection_format)
+  end
+
   local lines = {}
 
   -- Helper to wrap text to column_limit

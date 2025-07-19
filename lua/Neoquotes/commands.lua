@@ -321,11 +321,16 @@ local function get_users_quotes()
 end
 
 local function get_default_quotes()
-  local quotes = load_builtin_collection("western-philosophy")
-  if quotes then
-    return quotes
+  local all = {}
+  for _, name in ipairs(config.config.collections) do
+    local quotes = load_builtin_collection(name)
+    if quotes then
+      for _, q in ipairs(quotes) do
+        table.insert(all, q)
+      end
+    end
   end
-  return {}
+  return all
 end
 
 ---------------------------
@@ -343,7 +348,7 @@ function M.ListCollections()
         name = collection_name,
         count = #quotes,
         source = config.config.user_collections_path and
-        load_user_collection(collection_name, config.config.user_collections_path) and "user" or "built-in"
+            load_user_collection(collection_name, config.config.user_collections_path) and "user" or "built-in"
       })
     end
   end

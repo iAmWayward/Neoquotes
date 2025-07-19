@@ -27,7 +27,7 @@ So it's a little over-engineered. But it is very fit for purpose.
 ```lua
 return {
   {
-    "iAmWayward/quotes.nvim",
+    "iAmWayward/Neoquotes",
     event = "VeryLazy",
     opts = {},
   }
@@ -54,7 +54,7 @@ return {
 ## Default Config
 ```lua
 return {
-  "iAmWayward/Neoquotes.nvim",
+  "iAmWayward/Neoquotes",
   opts = {
     -- Specify which built-in collections to include
     -- Setting this will override defaults

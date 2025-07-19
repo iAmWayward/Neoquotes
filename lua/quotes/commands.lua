@@ -188,14 +188,30 @@ end
 ---------------------------
 -- Collection handling
 ---------------------------
-
 local function load_builtin_collection(collection_name)
   local cache_key = "builtin_" .. collection_name
   if loaded_collections[cache_key] then
     return loaded_collections[cache_key]
   end
-  local ok, quotes = pcall(require, "quotes.quote-collections." .. collection_name)
-  if ok and type(quotes) == "table" then
+  local ok, collection_data = pcall(require, "quotes.quote-collections." .. collection_name)
+  if ok and type(collection_data) == "table" then
+    -- Process the collection data to add metadata to quotes
+    local quotes = collection_data.quotes or collection_data
+    local format_overrides = collection_data.format
+
+    -- Add collection format to each quote
+    if format_overrides then
+      for _, quote in ipairs(quotes) do
+        quote._collection_format = format_overrides
+        quote._collection_name = collection_name
+      end
+    else
+      -- Just add collection name for reference
+      for _, quote in ipairs(quotes) do
+        quote._collection_name = collection_name
+      end
+    end
+
     loaded_collections[cache_key] = quotes
     return quotes
   end
@@ -213,14 +229,34 @@ local function load_user_collection(collection_name, user_path)
     return nil
   end
   file:close()
-  local ok, quotes = pcall(dofile, file_path)
-  if ok and type(quotes) == "table" then
+  local ok, collection_data = pcall(dofile, file_path)
+  if ok and type(collection_data) == "table" then
+    -- Process the collection data to add metadata to quotes
+    local quotes = collection_data.quotes or collection_data
+    local format_overrides = collection_data.format
+
+    -- Add collection format to each quote
+    if format_overrides then
+      for _, quote in ipairs(quotes) do
+        quote._collection_format = format_overrides
+        quote._collection_name = collection_name
+      end
+    else
+      -- Just add collection name for reference
+      for _, quote in ipairs(quotes) do
+        quote._collection_name = collection_name
+      end
+    end
+
     loaded_collections[cache_key] = quotes
     return quotes
   end
   return nil
 end
 
+--- Return a list of the collections in the user's custom collection folder
+---@param user_path string Path to the user's custom collections
+---@return table loaded_functions the list of user collections
 local function users_active_collections(user_path)
   local collections = {}
   if not user_path then

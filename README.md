@@ -54,7 +54,7 @@ return {
 ## Default Config
 ```lua
 return {
-  "iAmWayward/quotes.nvim",
+  "iAmWayward/Neoquotes.nvim",
   opts = {
     -- Specify which built-in collections to include
     -- Setting this will override defaults

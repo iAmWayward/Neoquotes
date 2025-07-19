@@ -1,6 +1,8 @@
 return {
-  {
-    text = "",
-    author = "",
-  },
+  quotes = {
+    {
+      text = "",
+      author = "",
+    },
+  }
 }

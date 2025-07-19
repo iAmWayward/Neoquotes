@@ -1,4 +1,5 @@
 return {
+  quotes =
   { text = "As seen on TV!", author = nil },
   { text = "Awesome!", author = nil },
   { text = "100% pure!", author = nil },
@@ -501,4 +502,5 @@ return {
   { text = "Jason! Jason! Jason! Jeison?", author = nil },
   { text = "Verlet integration!", author = nil },
   { text = "Not on Steam!", author = nil },
+}
 }

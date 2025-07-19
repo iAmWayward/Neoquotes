@@ -347,8 +347,7 @@ function M.ListCollections()
       table.insert(collections, {
         name = collection_name,
         count = #quotes,
-        source = config.config.user_collections_path and
-            load_user_collection(collection_name, config.config.user_collections_path) and "user" or "built-in"
+        source = load_user_collection(collection_name, config.config.user_collections_path) or "built-in"
       })
     end
   end

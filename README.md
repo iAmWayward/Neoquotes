@@ -44,7 +44,7 @@ return {
           config = {
                 -- ... [your dashboard setup]
                 -- Use QuoteOfTheDay command to get today's quote
-                footer = require("quotes.functions.commands").QuoteOfTheDay(),
+                footer = require("Neoquotes.commands").QuoteOfTheDay(),
             }, 
         })
     end

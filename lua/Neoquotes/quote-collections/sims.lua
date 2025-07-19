@@ -1,0 +1,6 @@
+return {
+  {
+    text = "",
+    author = "",
+  },
+}

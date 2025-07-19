@@ -1,6 +1,6 @@
 local M = {}
 
-function M.setup(opts)
+function M.init_func(opts)
   -- if vim.g.loaded_phrase_of_the_day then
   --   return
   -- end

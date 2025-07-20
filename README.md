@@ -156,4 +156,34 @@ You can mix collections with different formats into the same config as long as e
 
 
 
+You may find that you want to grab a bunch of quotes off a webpage that are formatted by html.
+In that case, you may find this useful on your journey
 
+```bash
+curl -s 'URL' | \ # Url of the page you want to scrape
+htmlq 'td li' --text | \ # See below
+sed 's/"/\\"/g' | \ # Escape quotes for lua
+awk 'BEGIN { print "return {" } { print "  { text = \"" $0 "\", author = nil }," } END { print "}" }'
+
+```
+
+`htmlq 'td li' --text` is the syntax to pull the text out of content formatted like this
+
+```html
+<table><tbody><tr>
+<td width="50%" align="left" valign="top" style="border:none;">
+<ul><li>Extruding Mesh Terrain</li>
+<li>Balancing Domestic Coefficients</li>
+<li>Inverting Career Ladder</li>
+<li>Calculating Money Supply</li>
+<li>Normalizing Social Network</li></ul>
+</td>
+<td width="50%" align="left" valign="top" style="border:none;">
+<ul><li><a href="/wiki/Reticulating_Splines" class="mw-redirect" title="Reticulating Splines">Reticulating Splines</a></li>
+<li>Adjusting Emotional Weights</li>
+<li>Calibrating Personality Matrix</li>
+<li>Inserting Chaos Generator</li></ul>
+</td></tr></tbody></table>
+```
+
+Want to give it a try? Test the commands out on the Sims wiki page for [loading splash messages](https://sims.fandom.com/wiki/Loading_screen_messages)

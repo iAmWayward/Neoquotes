@@ -95,6 +95,13 @@ local function load_builtin_collection(collection_name)
   return nil
 end
 
+local function get_custom_quotes_collection()
+  if config.config.custom_quotes and #config.config.custom_quotes > 0 then
+    return { quotes = config.config.custom_quotes }
+  end
+  return nil
+end
+
 local function load_user_collection(collection_name, user_path)
   local cache_key = "user_" .. user_path .. "_" .. collection_name
   if loaded_collections[cache_key] then
@@ -159,6 +166,15 @@ end
 -- Gather all active quotes (merges all user + built-in collections)
 local function get_users_quotes()
   local all_quotes = {}
+
+  -- custom quotes defined in opts
+  local custom = get_custom_quotes_collection()
+  if custom then
+    for _, quote in ipairs(collect_quotes_from_collection(custom)) do
+      table.insert(all_quotes, quote)
+    end
+  end
+
   -- Collections from config
   for _, collection_name in ipairs(config.config.collections or {}) do
     local col = load_collection(collection_name)
@@ -389,6 +405,13 @@ function M.ListCollections()
   return collections
 end
 
+--- Needed when adding new files to the custom folder
+function M.ReloadCollections()
+  loaded_collections = {}
+  shuffled_quotes_cache = { quotes = nil, config_hash = nil, shuffle_date = nil }
+  print("Quote collections reloaded!")
+end
+
 ---------------------------
 -- Command registration
 ---------------------------
@@ -396,6 +419,10 @@ end
 function M.setup()
   if M._commands_created then return end
   M._commands_created = true
+
+  vim.api.nvim_create_user_command("QuoteCollectionsReload", function()
+    M.ReloadCollections()
+  end, { desc = "Reload collections (when adding new files)" })
 
   vim.api.nvim_create_user_command("QuoteOfTheDay", function()
     local quote = M.QuoteOfTheDay()

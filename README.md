@@ -51,6 +51,7 @@ return {
 },
 ```
 
+# Setup
 ## Default Config
 ```lua
 return {
@@ -63,25 +64,26 @@ return {
       "tips", -- neovim motion tips
       "buddhist",
       "taoist",
-      "science", 
-      "philosophy"
-      "minecraft", -- minecraft title screen splashes
-      "sims", -- Sims loading screen splashes
+      -- "science", 
+      -- "philosophy"
+      -- "minecraft", -- minecraft title screen splashes
+      -- "sims", -- Sims loading screen splashes
     },
     
-    -- Path to user's custom quote collections
+    -- Path to your custom quote collections
     -- Each .lua file in this directory will be loaded as a collection
     -- This also overrides defaults, but cooperates with manual selections
-    user_collections_path = vim.fn.expand("~/my-quotes"), 
-    
+    user_collections_path = vim.fn.expand("~/my-quotes"), -- IE put quotes in .config/nvim/my-quotes/my-quote-file.lua
+
+    custom_quotes = {}, -- One-off quotes  
     -- Formatting options
     format = {
-      prefix = "💭 ", -- Prefix for the quote
+      prefix = "💭 ",          -- Prefix for the quote
       author_prefix = "   — ", -- Prefix for the author quote
-      add_empty_lines = true, -- pad the quote with blank lines
-      attribute_author = true,
-      set_column_limit = true,
-      column_limit = 120,
+      add_empty_lines = true,  -- pad the quote with blank lines
+      attribute_author = true, -- Hide the author if you want
+      set_column_limit = true, -- For environments which don't wrap like dashboard.nvim
+      column_limit = 120,      -- If it's enabled
     },
   },
 }
@@ -104,8 +106,20 @@ return {
     -- etc...
 }
 ```
- 
-### Alternatively: override the default prefixes for the collection
+
+You can put one-off quotes directly in the plugin config
+
+### Adding singleton quotes
+```lua
+opts = {
+    custom_quotes = {
+        { text = "Stay hungry. Stay foolish.", author = "Steve Jobs" },
+        { text = "Code is like humor. When you have to explain it, it’s bad.", author = "Cory House" },
+  }
+}
+```
+
+### Override prefixes defined in opts for an entire collection
 ```lua
 -- vim_shortcuts.lua
 return {
@@ -120,7 +134,7 @@ return {
 }
 ```
 
-### Or you can override prefixes on a per-quote basis
+### Override prefixes on a per-quote basis
 Take note that you can mix these approaches as-needed
 
 ```
@@ -154,9 +168,11 @@ You can mix collections with different formats into the same config as long as e
 | `:QuoteOfTheDay`      | This only changes once every 24 hours    |
 | `:QuoteRandomPhrase`  | See a random phrase (not just your QOTD) |
 | `:QuoteListCollections` | Show which collections you have enabled |
+| :QuoteCollectionsReload | Use this when you add new files to your custom path |
 
 
 
+## Quickly gather quotes from formatted sources
 You may find that you want to grab a bunch of quotes off a webpage that are formatted by html.
 In that case, you may find this useful on your journey
 

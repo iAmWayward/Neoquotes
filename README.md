@@ -66,6 +66,7 @@ return {
       "science", 
       "philosophy"
       "minecraft", -- minecraft title screen splashes
+      "sims", -- Sims loading screen splashes
     },
     
     -- Path to user's custom quote collections

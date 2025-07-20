@@ -53,17 +53,27 @@ local function get_day_number()
   return date.yday + (year_offset * 365) + leap_days
 end
 
--- Normalize collection tables to always have {quotes=..., format=...}
-local function normalize_collection(raw)
-  -- Case 1: Array of {text=...,author=...}
-  if vim.tbl_islist(raw) and raw[1] and raw[1].text then
-    return { quotes = raw }
+-- Helper: Is this table a plain array?
+local function is_array(tbl)
+  if type(tbl) ~= "table" then return false end
+  local count = 0
+  for k, _ in pairs(tbl) do
+    if type(k) ~= "number" or k ~= math.floor(k) or k < 1 then return false end
+    count = count + 1
   end
-  -- Case 2: { format = {...}, quotes = {...} }
+  return count == #tbl
+end
+
+local function normalize_collection(raw)
+  -- Case 2: { format = ..., quotes = ... }
   if type(raw) == "table" and raw.quotes then
     return raw
   end
-  -- (Optional: Error out for invalid collections)
+  -- Case 1: Array of quotes (list of {text=..., author=...})
+  if is_array(raw) and raw[1] and raw[1].text then
+    return { quotes = raw }
+  end
+  -- fallback: not a valid collection
   return nil
 end
 

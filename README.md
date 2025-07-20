@@ -61,13 +61,11 @@ return {
     collections = {
     -- The collections not-included in the default set are commented out here
       "tips", -- neovim motion tips
-      "swe",  -- Software Engineering
       "buddhist",
       "taoist",
       "science", 
-      -- "generic-inspiration",
-      -- "western-philosophy"
-      -- "minecraft", -- minecraft title screen splashes
+      "philosophy"
+      "minecraft", -- minecraft title screen splashes
     },
     
     -- Path to user's custom quote collections
@@ -105,6 +103,49 @@ return {
     -- etc...
 }
 ```
+ 
+### Alternatively: override the default prefixes for the collection
+```lua
+-- vim_shortcuts.lua
+return {
+  format = {
+    prefix = "⌨️ ",
+    author_prefix = "Usage: ",
+  },
+  quotes = {
+    { text = "gg", author = "Move to the first line of the file" },
+    { text = "G", author = "Move to the last line" },
+  }
+}
+```
+
+### Or you can override prefixes on a per-quote basis
+Take note that you can mix these approaches as-needed
+
+```
+-- editor_tips.lua
+return {
+  format = {
+    prefix = "💡 ",
+    author_prefix = "Tip: ",
+  },
+  quotes = {
+    {
+      text = ":%s/foo/bar/g",
+      author = "Replace 'foo' with 'bar'",
+    },
+    { -- We give this one a special prefix which isn't shared with other members of the collection
+      text = "u",
+      author = "Undo",
+      format = {
+        prefix = "⏪ ",
+        author_prefix = "Shortcut: ",
+      },
+    }
+}
+```
+
+You can mix collections with different formats into the same config as long as each collection has valid syntax.
 
 ## Commands
 | Command               | Description                              |

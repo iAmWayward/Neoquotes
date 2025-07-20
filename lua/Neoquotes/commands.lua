@@ -110,16 +110,22 @@ local function load_user_collection(collection_name, user_path)
   local file_path = user_path .. "/" .. collection_name .. ".lua"
   local file = io.open(file_path, "r")
   if not file then
+    print("[Neoquotes] User collection file not found: " .. file_path)
     return nil
   end
   file:close()
   local ok, raw = pcall(dofile, file_path)
-  if ok and type(raw) == "table" then
-    local col = normalize_collection(raw)
-    loaded_collections[cache_key] = col
-    return col
+  if not ok then
+    print("[Neoquotes] Failed to load user collection file: " .. file_path)
+    return nil
   end
-  return nil
+  local col = normalize_collection(raw)
+  if not col then
+    print("[Neoquotes] User collection '" .. collection_name .. "' is invalid (no quotes found?)")
+    return nil
+  end
+  loaded_collections[cache_key] = col
+  return col
 end
 
 local function users_active_collections(user_path)

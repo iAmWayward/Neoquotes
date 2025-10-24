@@ -42,7 +42,7 @@ return {
     { text = "Dungeon!", author = nil },
     { text = "Exclusive!", author = nil },
     { text = "The bee's knees!", author = nil },
-    { text = "Closed source!", author = nil },
+    { text = "Open source!", author = nil },
     { text = "Classy!", author = nil },
     { text = "Wow!", author = nil },
     { text = "Not on Steam!", author = nil },
